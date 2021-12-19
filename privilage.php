@@ -1,10 +1,4 @@
 <?php
-    // session_start();
-    // $type = $_SESSION['type'];
-
-?>
-
-<?php
     if ($type == "Giám đốc"){
         ?>
             <div class="dropdown">
@@ -34,4 +28,3 @@
         <?php
     }
 ?>
-

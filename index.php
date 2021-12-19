@@ -42,8 +42,7 @@
                     </div>
                 </div> -->
                 <!-- <button type ="button" class="me-auto btn-logout btn btn-danger mt-3">Chức năng</button> -->
-                <?php require_once 'privilage.php' ?>
-
+                <?php require_once 'privilage.php';?>
             </div>
         </div>
     </div>
@@ -76,8 +75,34 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-12 col-lg-9 tasks-list">
 
+            
+            <div class="col-12 col-lg-9 tasks-list">
+                <?php
+                    require_once 'connection.php';
+                    $sql = 'SELECT * FROM `tasks`';
+                    $stm = $dbCon->prepare($sql);
+                    $stm->execute();
+                    // print_r($stm->rowCount());
+                    while ($row = $stm->fetch(PDO::FETCH_ASSOC)){
+                        // print_r($row) ;
+                        ?>
+                            <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <p class="task-name fw-bold"><?= $row['name'] ?></p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="tasks-status"><?= $row['status'] ?></p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                    }
+                ?>
                 <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
                     <div class="row text-center">
                         <div class="col-4">
@@ -119,33 +144,9 @@
                     </div>
                 </div>
 
-                <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <p class="task-name fw-bold">Tổ chức sự kiện sinh nhật cho giám đốc</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="tasks-status">New</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="task-deadline text-end">30/12/2021</p>
-                        </div>
-                    </div>
-                </div>
+                
 
-                <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <p class="task-name fw-bold">Tổ chức sự kiện sinh nhật cho giám đốc</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="tasks-status">New</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="task-deadline text-end">30/12/2021</p>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>
