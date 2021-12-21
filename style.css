@@ -1,0 +1,68 @@
+body#login-page, body#form-add-user, body#list-user{
+    background-color: #daf1f5;
+}
+
+.login-form{
+    /* width: 100vw; */
+    width: 40%;
+    height: 100vh;
+}
+
+.login-wrap{
+    box-shadow:  5px 5px 20px rgb(0 0 0 / 50%);
+}
+
+.input-login{
+    padding: 0px 3rem;
+}
+
+.avata-header{
+    width: 100%;
+    height: 100%;
+
+}
+
+/* .header{
+    height: 20%;
+} */
+
+.header-profile{
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-profile-name{
+    /* text-decoration: none; */
+    color: black;
+}
+
+.task-item, .form-add-user-wrap, .information-form-wrap, .days-off-form-wrap{
+    box-shadow: 1px 1px 20px rgb(0 0 0 / 10%);
+}
+
+.form-add-user{
+    height: 100vh;
+    justify-content: center;
+}
+
+.task-description{
+    padding-left: .375rem;
+
+    width: 100%;
+}
+
+.information-form{
+    width: 400px;
+    height: 100vh;
+}
+
+.avatar-information{
+    width: 100%;
+}
+
+.days-off-form{
+    width: 40%;
+    height: 100vh;
+}

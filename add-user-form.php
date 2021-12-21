@@ -23,8 +23,9 @@
     $gender = '';
     $room = '';
     $salary = '';
-    $avatar = '';
+    $avatar = 'avatar.png';
     $error = '';
+    $phone ='';
 
     // $f = isset($_FILES['avatar']) ? $_FILES['avatar'] : "";
     // $dest = "img/".$f['name'];
@@ -35,7 +36,7 @@
         move_uploaded_file($f['tmp_name'],$dest);
     }
 
-    if (isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['birthday']) && isset($_POST['room']) && isset($_POST['salary']) ){
+    if (isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['birthday']) && isset($_POST['room']) && isset($_POST['salary']) && isset($_POST['phone']) ){
         $gender = isset($_POST['gender']) ? $_POST['gender'] : "" ; 
         $name = $_POST['name'];
         $username = $_POST['username'];
@@ -44,6 +45,7 @@
         $birthday = $_POST['birthday'];
         $room = $_POST['room'];
         $salary = $_POST['salary'];
+        $phone = $_POST['phone'];
     
 
 
@@ -71,18 +73,24 @@
         else if(empty($salary)){
             $error = "Nhập lương nhân viên";
         }
+        else if(empty($phone)){
+            $error = "Nhập số điện thoại";
+        }
         else{
             $passwordHashed = password_hash($username,PASSWORD_DEFAULT);
             // echo "thành công";
-            $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?); ";
+            $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?); ";
             $stm = $dbCon->prepare($sql);
-            $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar));
-            if ($stm->rowCount()==1){
-                header("Location: notification.php");
+            try{
+                $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone));
+                if ($stm->rowCount()==1){
+                    header("Location: notification.php?type=add_user_success");
+                }
             }
-            else{
-                $error = "Lỗi";
+            catch(Exception $e){
+                $error = "Lỗi ".$e->getMessage();
             }
+
         }
         
     }
@@ -101,6 +109,11 @@
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input value="<?= $username ?>"  name="username" class="form-control" type="text" placeholder="Username" id="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Điện thoại</label>
+                        <input value="<?= $phone ?>" name="phone" class="form-control" type="text" placeholder="Điện thoại" id="phone">
                     </div>
 
                     <div class="form-group">
@@ -154,10 +167,6 @@
                         <label for="avatar">Avatar</label>
                         <input type="file" class="form-control-file" id="avatar" name="avatar">
                     </div>
-                    
-                    <!-- <div class="w-100 mt-3">
-                        <button type="submit" class="btn btn-primary px-5 mr-2 ml-auto d-block">Thêm</button>
-                    </div> -->
                     <div class="form-group">
                         <?php
                             if (!empty($error)) {

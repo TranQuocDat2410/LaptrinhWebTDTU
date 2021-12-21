@@ -14,15 +14,38 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 mt-5 mx-auto p-3 border rounded">
-        <h4>Cập nhật mật khẩu thành công</h4>
-        <p class="text-success">Congratulations! Your account has been activated.</p>
-        <p>Click <a href="login.php">here</a> to login and manage your account information.</p>
-        <a class="btn btn-success px-5" href="login.php">Login</a>
-      </div>
-    </div>
+  <?php
+    // $type = $_GET['type'];
+    if ($type == "add_user_success"){
+      ?>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mt-5 mx-auto p-3 border rounded">
+              <h4>Thêm nhân viên thành công</h4>
+              <p class="text-success">Congratulations! Your account has been activated.</p>
+              <p>Click <a href="login.php">here</a> to login and manage your account information.</p>
+              <a class="btn btn-success px-5" href="index.php">Quay lại</a>
+            </div>
+          </div>
+        </div>
+      <?php   
+    }
+    else{
+      ?>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mt-5 mx-auto p-3 border rounded">
+              <h4>Cập nhật mật khẩu thành công</h4>
+              <p class="text-success">Congratulations! Your account has been activated.</p>
+              <p>Click <a href="login.php">here</a> to login and manage your account information.</p>
+              <a class="btn btn-success px-5" href="index.php">Quay lại</a>
+            </div>
+          </div>
+        </div>
+  <?php
+    }
+  ?>
+
 </body>
 
 </html>
