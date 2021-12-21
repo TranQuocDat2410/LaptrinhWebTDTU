@@ -10,6 +10,7 @@
                     <a class="dropdown-item" href="list-user.php">Xem danh sách nhân viên</a>
                     <a class="dropdown-item" href="add_room.php">Thêm phòng ban</a>
                     <a class="dropdown-item" href="change_avatar.php?id=<?=$_SESSION['id']?>">Đổi avatar</a>
+                    <a class="dropdown-item" href="room.php">Xem danh sách phòng ban</a>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </div>        

@@ -34,6 +34,9 @@
         $dest = "img/".$f['name'];
         $avatar = $f['name'];
         move_uploaded_file($f['tmp_name'],$dest);
+        if (empty($avatar)){
+            $avatar = 'avatar.png';
+        }
     }
 
     if (isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['birthday']) && isset($_POST['room']) && isset($_POST['salary']) && isset($_POST['phone']) ){

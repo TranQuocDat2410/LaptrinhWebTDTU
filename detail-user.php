@@ -39,7 +39,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="img/avatar.png" alt="Admin"
+                                <img src="img/<?=$row['avatar']?>" alt="Admin"
                                     class="rounded-circle" width="150">
                                 <div class="mt-3">
                                     <h4><?= $row['name'] ?></h4>

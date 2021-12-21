@@ -25,26 +25,31 @@
     $leader = '';
     $desc = '';
 
-    if (isset($_GET['id']) &&isset($_GET['name']) && isset($_GET['leader']) && isset($_GET['number']) && isset($_GET['desc']))
+    // if (isset($_GET['id']))
+    // {
+    //     $id = $_GET['id'];
+    // }
+    $id = (isset($_GET['id']))? $_GET['id'] : "";
+    $sql = "SELECT * FROM `room` WHERE id=?";
+    require_once 'connection.php';
+    $stm = $dbCon->prepare($sql);
+    $stm->execute(array($id));
+    $selectedItem = $stm->fetch(PDO::FETCH_ASSOC);
+
+
+    if (isset($_POST['id']) && isset($_POST['tenphong']) && isset($_POST['leader'])&& isset($_POST['num_room']) && isset($_POST['mota']))
     {
-        $id = $_GET['id'];
-        $name = $_GET['name'];
-        $leader = $_GET['leader'];
-        $number = $_GET['number'];
-        $desc = $_GET['desc'];
-    }
-    if (isset($_POST['tenphong']) && isset($_POST['idtruongphong']) && isset($_POST['sophong'])&& isset($_POST['mota']))
-    {
+        $id = $_POST['id'];
         $name = $_POST['tenphong'];
-        $number = $_POST['idtruongphong'];
-        $leader = $_POST['sophong'];
+        $number = $_POST['num_room'];
+        $leader = $_POST['leader'];
         $desc = $_POST['mota'];
 
         if (empty($name)) {
             $error = 'Hãy nhập tên phòng';
         }
         else if (empty($leader)) {
-            $error = 'Hãy nhập Id Trường Phòng';
+            $error = 'Hãy nhập trưởng Phòng';
         }
         else if (empty($number)) {
             $error = 'Hãy nhập số phòng';
@@ -56,14 +61,43 @@
         else {
             require_once 'Connection.php';
            
-            $sql = "UPDATE `phongban` SET `tenphong` = ?, `idtruongphong` = ?, `sophong` = ?, `mota` = ? WHERE `phongban`.`idphong` = ?;";
+            $sql = "UPDATE `room` SET `name` = ?, `leader` = ?, `num_room` = ?, `description` = ? WHERE `room`.`id` = ?";
             $stm = $dbCon->prepare($sql);
-            $stm->execute(array($name,$leader,$number,$desc,$id));
-            echo "<script type='text/javascript'>
-            $(document).ready(function(){
-            $('#exampleModal').modal('show');
-            });
-            </script>";
+            try{
+                $stm->execute(array($name,$leader,$number,$desc,$id));
+                require_once 'function.php';
+                // changeLeader($selectedItem['name'],$leader);
+                // header("Location: notification.php");
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
+            $sql = "UPDATE `account` SET `chucvu` = 'Trưởng phòng' WHERE `account`.`name` = ?";
+            $stm = $dbCon->prepare($sql);
+            try{
+                $stm->execute(array($leader));
+                // header("Location: notification.php");
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
+
+            $sql = "UPDATE `account` SET `chucvu` = 'Nhân viên' WHERE `account`.`name` = ?";
+            $stm = $dbCon->prepare($sql);
+            try{
+                $stm->execute(array($selectedItem['leader']));
+                header("Location: notification.php");
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
+            
+            // echo "<script type='text/javascript'>
+            // $(document).ready(function(){
+            // $('#exampleModal').modal('show');
+            // });
+            // </script>";
+
         }
     }
 ?>
@@ -95,24 +129,36 @@
                 <form method="post" action="" novalidate enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <label for="price">ID </label>
-                        <input  readonly value="<?= $id?>" name="idphong" required class="form-control" type="number" placeholder="ID" id="price">
+                        <label for="id">ID </label>
+                        <input  readonly value="<?= $id?>" name="id" required class="form-control" type="number" placeholder="ID" id="id">
                     </div>
                     <div class="form-group">
                         <label for="name">Tên phòng</label>
-                        <input value="<?= $name?>" name="tenphong" required class="form-control" type="text" placeholder="Tên phòng" id="name">
+                        <input value="<?= $selectedItem['name']?>" name="tenphong" required class="form-control" type="text" placeholder="Tên phòng" id="name">
                     </div>
                     <div class="form-group">
-                        <label for="price">ID Trường phòng</label>
-                        <input value="<?= $leader?>" name="idtruongphong" required class="form-control" type="number" placeholder="ID" id="price">
+                        <label for="leader">Trưởng phòng</label>
+                        <!-- <input value="" name="idtruongphong" required class="form-control" type="text" placeholder="" id="price"> -->
+                        <select name="leader" id="leader"class="form-control">
+                            <option><?= $selectedItem['leader'] ?></option>
+                            <?php
+                                $sql = 'SELECT name FROM `account` WHERE chucvu = "Nhân viên"';
+                                $stm = $dbCon->prepare($sql);
+                                $stm->execute();
+                                while($employee = $stm->fetch(PDO::FETCH_ASSOC)){
+                                    echo '<option>'.$employee['name'].'</option>';
+                                }
+                            ?>
+
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="price">Số phòng</label>
-                        <input value="<?= $number?>" name="sophong" required class="form-control" type="number" placeholder="Số phòng" id="price">
+                        <label for="num_room">Số phòng</label>
+                        <input value="<?= $selectedItem['num_room']?>" name="num_room" required class="form-control" type="number" placeholder="Số phòng" id="num_room">
                     </div>
                     <div class="form-group">
                         <label for="desc">Mô tả</label>
-                        <textarea id="desc" name="mota" rows="4" class="form-control" placeholder="Mô tả"><?= $desc ?></textarea>
+                        <textarea id="desc" name="mota" rows="4" class="form-control" placeholder="Mô tả"><?= $selectedItem['description'] ?></textarea>
                     </div>
                     
                     <div class="form-group">

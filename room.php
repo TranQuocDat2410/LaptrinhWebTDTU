@@ -78,31 +78,30 @@
                 <a href="add_room.php">Thêm thông tin phòng</a>
             </td>
             <td class="text-right">
-                <a href="index.html">Trở lại</a>
+                <a href="index.php">Trở lại</a>
             </td>
         </tr>
         <tr class="header">
             <td>STT</td>
             <td>Tên Phòng</td>
-            <td>ID Trưởng phòng</td>
+            <td>Trưởng phòng</td>
             <td>Số phòng</td>
             <td>Mô tả</td>
         </tr>
         
             <?php
-                
-                require_once 'Connection.php';
-                $sql = 'SELECT * FROM `phongban`';
+                require_once 'connection.php';
+                $sql = 'SELECT * FROM `room`';
                 $stm = $dbCon->prepare($sql);
                 $stm->execute();
                 while($room = $stm->fetch(PDO::FETCH_ASSOC)){
-                    echo '<tr class="item" id="'.$room['idphong'].'">';
-                    echo "<td> ".$room['idphong']."</td>";
-                    echo "<td> ".$room['tenphong']."</td>";
-                    echo "<td>".$room['idtruongphong']." </td>";
-                    echo "<td>".$room['sophong']." </td>";
-                    echo "<td>".$room['mota']." </td>";
-                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="http://localhost/DoAnCuoiKy/edit_room.php?id='.$room['idphong'].'&name='.$room['tenphong'].'&leader='.$room['idtruongphong'].'&number='.$room['sophong'].'&desc='.$room['mota'].'" >Edit</a> </button></td>';
+                    echo '<tr class="item" id="'.$room['id'].'">';
+                    echo "<td> ".$room['id']."</td>";
+                    echo "<td> ".$room['name']."</td>";
+                    echo "<td>".$room['leader']." </td>";
+                    echo "<td>".$room['num_room']." </td>";
+                    echo "<td>".$room['description']." </td>";
+                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="http://localhost:8888/WebDoAnCuoiKy/edit_room.php?id='.$room['id'].'" >Edit</a> </button></td>';
                     echo'<td><button class="btn btn-danger btn-sm remove">Delete</button></td>';
                     echo '</tr>  ';
                 }
@@ -111,7 +110,7 @@
         <tr class="control" style="text-align: right; font-weight: bold; font-size: 17px">
             <td colspan="5">
                 <?php
-                    $sql = 'SELECT COUNT(idphong) as count FROM `phongban`';
+                    $sql = 'SELECT COUNT(id) as count FROM `room`';
                     $stm = $dbCon->prepare($sql);
                     $stm->execute();
                     $total = $stm->fetch(PDO::FETCH_ASSOC);
