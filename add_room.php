@@ -55,11 +55,11 @@
             $stm = $dbCon->prepare($sql);
             try{
                 $stm->execute(array($name,$desc, $leader, $number));
-                // echo "<script type='text/javascript'>
-                // $(document).ready(function(){
-                // $('#exampleModal').modal('show');
-                // });
-                // </script>";
+                echo "<script type='text/javascript'>
+                $(document).ready(function(){
+                $('#exampleModal').modal('show');
+                });
+                </script>";
             }
             catch(Exception $e){
                 $error = "Lỗi " . $e->getMessage();
@@ -69,11 +69,12 @@
             $stm = $dbCon->prepare($sql);
             try{
                 $stm->execute(array($leader));
+                
             }
             catch (Exception $e){
                 $error = "Lỗi " . $e->getMessage();
             }
-            header("Location: notification.php");
+            
         }
     }
 ?>
@@ -115,7 +116,7 @@
                         <select class="form-control" name="leader" id="leader">
                             <?php
                                 require_once 'connection.php';
-                                $sql = 'SELECT name FROM `account` WHERE chucvu ="Nhân viên"';
+                                $sql = 'SELECT name FROM `account` WHERE chucvu ="Trưởng phòng"';
                                 $stm = $dbCon->prepare($sql);
                                 $stm->execute();
                                 while ($row = $stm->fetch(PDO::FETCH_ASSOC)){
