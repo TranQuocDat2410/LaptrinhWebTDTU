@@ -3,19 +3,28 @@
 <?php require_once 'heading.php' ?>
 
 <?php
-    $name = "Trần quốc Đạt";
-    $type = "Nhân viên";
+    // $name = "Trần quốc Đạt";
+    // $type = "Nhân viên";
     session_start();
-    if (!isset($_SESSION['username'])){
+    if (!isset($_SESSION['id'])){
         header('Location: login.php');
         die();
     }else{
-        $name = $_SESSION['name'];
-        $type = $_SESSION['type'];
-        $avatar = $_SESSION['avatar'];
+        // $name = $_SESSION['name'];
+        // $type = $_SESSION['type'];
+        // $avatar = $_SESSION['avatar'];
         $id = $_SESSION['id'];
+        require_once 'connection.php';
+        $sql = "SELECT * FROM `account` WHERE id=? ";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id));
+        if ($stm->rowCount()==1){
+            $row = $stm->fetch(PDO::FETCH_ASSOC);
+            $name = $row['name'];
+            $type = $row['chucvu'];
+            $avatar = $row['avatar']; 
+        }
     }
-    
 ?>
 
 <body>

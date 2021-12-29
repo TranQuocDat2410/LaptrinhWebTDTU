@@ -116,7 +116,7 @@
                         <select class="form-control" name="leader" id="leader">
                             <?php
                                 require_once 'connection.php';
-                                $sql = 'SELECT name FROM `account` WHERE chucvu ="Trưởng phòng"';
+                                $sql = 'SELECT name FROM `account` WHERE chucvu ="Nhân viên"';
                                 $stm = $dbCon->prepare($sql);
                                 $stm->execute();
                                 while ($row = $stm->fetch(PDO::FETCH_ASSOC)){

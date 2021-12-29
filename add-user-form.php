@@ -82,10 +82,10 @@
         else{
             $passwordHashed = password_hash($username,PASSWORD_DEFAULT);
             // echo "thành công";
-            $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?); ";
+            $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`,`gender`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?,?); ";
             $stm = $dbCon->prepare($sql);
             try{
-                $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone));
+                $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone, $gender));
                 if ($stm->rowCount()==1){
                     header("Location: notification.php?type=add_user_success");
                 }

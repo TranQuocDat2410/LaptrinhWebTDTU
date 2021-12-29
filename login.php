@@ -30,14 +30,14 @@
                         header("Location: set_password.php?id=$id");
                         die();
                     }
-                    $_SESSION['name'] = $dataUser['name'];
                     $_SESSION['id'] = $dataUser['id'];
-                    $_SESSION['username'] = $dataUser['username'];
+                    // $_SESSION['name'] = $dataUser['name'];
+                    // $_SESSION['username'] = $dataUser['username'];
                     // $_SESSION['address'] = $dataUser['diachi'];
-                    $_SESSION['type'] = $dataUser['chucvu'];
-                    $_SESSION['room'] = $dataUser['phongban'];
+                    // $_SESSION['type'] = $dataUser['chucvu'];
+                    // $_SESSION['room'] = $dataUser['phongban'];
                     // $_SESSION['birthday'] = $dataUser['birthday'];
-                    $_SESSION['avatar'] = $dataUser['avatar'];
+                    // $_SESSION['avatar'] = $dataUser['avatar'];
                     header("Location: index.php");
                 }
                 else {

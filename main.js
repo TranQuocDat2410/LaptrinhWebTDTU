@@ -5,7 +5,7 @@ $(document).ready(function(){
         console.log(data);
         $("#list-user tbody tr").remove();
         data.data.forEach(user =>{
-            let userCell = $('<tr> <th scope="row">'+ user.id +'</th> <td>'+ user.name +'</td> <td>'+user.phongban+'</td> <td>'+ user.chucvu +'</td> <td> <button class="btn btn-success">View</button> <button class="btn btn-danger">Edit</button> </td> </tr>');
+            let userCell = $('<tr> <th scope="row">'+ user.id +'</th> <td>'+ user.name +'</td> <td>'+user.phongban+'</td> <td>'+ user.chucvu +'</td> <td> <button class="btn btn-success" onclick="btn_view_user(this)">View</button>')
             let userStr = JSON.stringify(user);
             userCell.attr("userInfo",userStr)
             // console.log(userStr);
@@ -38,3 +38,10 @@ $(document).ready(function(){
     })
 
 });
+
+function btn_view_user(element){
+    let userinfoStr = $(element.parentNode.parentNode).attr("userinfo")
+    let userinfo = JSON.parse(userinfoStr)
+    let id = userinfo['id']
+    location.href = "detail-user.php?id=" + id
+}
