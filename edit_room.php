@@ -59,45 +59,13 @@
         }
         
         else {
-            require_once 'Connection.php';
-           
-            $sql = "UPDATE `room` SET `name` = ?, `leader` = ?, `num_room` = ?, `description` = ? WHERE `room`.`id` = ?";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($name,$leader,$number,$desc,$id));
-                require_once 'function.php';
-                // changeLeader($selectedItem['name'],$leader);
-                // header("Location: notification.php");
-            }
-            catch(Exception $e){
-                echo $e->getMessage();
-            }
-            $sql = "UPDATE `account` SET `chucvu` = 'Trưởng phòng' WHERE `account`.`name` = ?";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($leader));
-                // header("Location: notification.php");
-            }
-            catch(Exception $e){
-                echo $e->getMessage();
-            }
 
-            $sql = "UPDATE `account` SET `chucvu` = 'Nhân viên' WHERE `account`.`name` = ?";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($selectedItem['leader']));
-                header("Location: notification.php");
-            }
-            catch(Exception $e){
-                echo $e->getMessage();
-            }
+            require 'function.php';
+            editRoom($name, $leader, $number, $desc, $id);
+            changePrivilage($selectedItem['leader'],"Nhân viên");
+            changePrivilage($leader,"Trưởng phòng");
+            header("Location: notification.php?type=update_room_success");
             
-            // echo "<script type='text/javascript'>
-            // $(document).ready(function(){
-            // $('#exampleModal').modal('show');
-            // });
-            // </script>";
-
         }
     }
 ?>
@@ -142,9 +110,9 @@
                         <select name="leader" id="leader"class="form-control">
                             <option><?= $selectedItem['leader'] ?></option>
                             <?php
-                                $sql = 'SELECT name FROM `account` WHERE chucvu = "Nhân viên"';
+                                $sql = 'SELECT * FROM `account` WHERE `account`.`chucvu`="Nhân viên" AND `account`.`phongban`=?';
                                 $stm = $dbCon->prepare($sql);
-                                $stm->execute();
+                                $stm->execute(array($selectedItem['name']));
                                 while($employee = $stm->fetch(PDO::FETCH_ASSOC)){
                                     echo '<option>'.$employee['name'].'</option>';
                                 }
@@ -184,4 +152,3 @@
 </script>
 </body>
 </html>
-
