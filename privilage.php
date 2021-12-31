@@ -11,10 +11,26 @@
                     <a class="dropdown-item" href="add_room.php">Thêm phòng ban</a>
                     <a class="dropdown-item" href="change_avatar.php?id=<?=$_SESSION['id']?>">Đổi avatar</a>
                     <a class="dropdown-item" href="room.php">Xem danh sách phòng ban</a>
+                    <a class="dropdown-item" href="add_task.php?id=<?=$_SESSION['id']?>">Giao công việc</a>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </div>        
         <?php 
+    }
+    else if($type == "Trưởng phòng"){
+        ?>
+            <div class="dropdown">
+                <button class="btn btn-danger dropdown-toggle mt-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    Chức năng
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="change_avatar.php?id=<?=$_SESSION['id']?>">Đổi avatar</a>
+                    <a class="dropdown-item" href="set_password.php?id=<?=$_SESSION['id']?>">Đổi mật khẩu</a>
+                    <a class="dropdown-item" href="add_task.php?id=<?=$_SESSION['id']?>">Giao công việc</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>        
+        <?php
     }
     else{
         ?>  

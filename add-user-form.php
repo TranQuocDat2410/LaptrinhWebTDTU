@@ -39,16 +39,17 @@
         }
     }
 
-    if (isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['birthday']) && isset($_POST['room']) && isset($_POST['salary']) && isset($_POST['phone']) ){
+    // if (isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['birthday']) && isset($_POST['salary']) && isset($_POST['phone']) ){
+    if (isset($_POST['submit'])){
         $gender = isset($_POST['gender']) ? $_POST['gender'] : "" ; 
-        $name = $_POST['name'];
-        $username = $_POST['username'];
-        $address = $_POST['address'];
-        $email = $_POST['email'];
-        $birthday = $_POST['birthday'];
-        $room = $_POST['room'];
-        $salary = $_POST['salary'];
-        $phone = $_POST['phone'];
+        $name = isset($_POST['name']) ? $_POST['name'] : "" ;
+        $username = isset($_POST['username']) ? $_POST['username'] : "" ;
+        $address = isset($_POST['address'])? $_POST['address'] : "" ;
+        $email = isset($_POST['email'])? $_POST['email'] : "" ;
+        $birthday = isset($_POST['birthday'])? $_POST['birthday'] : "";
+        $room = isset($_POST['room'])? $_POST['room'] : "" ;
+        $salary = isset($_POST['salary'])? $_POST['salary'] : "" ;
+        $phone = isset($_POST['phone'])? $_POST['phone'] : "" ;
     
 
 
@@ -79,21 +80,19 @@
         else if(empty($phone)){
             $error = "Nhập số điện thoại";
         }
+        else if (strtotime($birthday) > time()){
+            $error = "Ngày sinh không hợp lệ";
+        }
         else{
-            $passwordHashed = password_hash($username,PASSWORD_DEFAULT);
-            // echo "thành công";
-            $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?); ";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone));
-                if ($stm->rowCount()==1){
-                    header("Location: notification.php?type=add_user_success");
-                }
+            
+            require 'function.php';
+            if(add_user($username, $name, $room, $address, $birthday, $salary, $email, $avatar, $phone, $gender)==1){
+                header("Location: notification.php?type=add_user_success");
             }
-            catch(Exception $e){
-                $error = "Lỗi ".$e->getMessage();
+            else{
+                $error = add_user($username, $name, $room, $address, $birthday, $salary, $email, $avatar, $phone, $gender);
             }
-
+            
         }
         
     }
@@ -137,11 +136,11 @@
                     <div class="form-group form-inline">
                         <span class="mr-3">Giới tính: </span>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="male" value="Nam">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="Nam" <?php if(isset($_POST['gender']) && $_POST['gender'] =='Nam' ){echo "checked";}?>>
                             <label class="form-check-label" for="inlineRadio1">Nam</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="female" value="Nữ">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="Nữ" <?php if(isset($_POST['gender']) && $_POST['gender'] =='Nữ' ){echo "checked";}?>>
                             <label class="form-check-label" for="inlineRadio2">Nữ</label>
                         </div>
                     </div>
@@ -176,7 +175,7 @@
                                 echo "<div class='alert alert-danger'>$error</div>";
                             }
                         ?>
-                        <button type="submit" class="btn btn-primary px-5 d-block ml-auto">Thêm</button>
+                        <button name="submit" type="submit" class="btn btn-primary px-5 d-block ml-auto">Thêm</button>
                     </div>                    
                     
                 </form>

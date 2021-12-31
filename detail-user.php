@@ -39,12 +39,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="img/<?=$row['avatar']?>" alt="Admin"
-                                    class="rounded-circle" width="150">
+                                <img src="img/<?=$row['avatar']?>" alt="Admin" class="rounded-circle" width="150">
                                 <div class="mt-3">
                                     <h4><?= $row['name'] ?></h4>
                                     <p class="text-secondary mb-1"><?=$row['chucvu']?></p>
-                                    <p class="text-muted font-size-sm"><?= $row['phongban'] ?></p></p>
+                                    <p class="text-muted font-size-sm"><?= $row['phongban'] ?></p>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +53,7 @@
                 <div class="col-md-8">
                     <div class="card mb-3">
                         <div class="card-body">
-                            
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Email</h6>
@@ -69,7 +68,7 @@
                                     <h6 class="mb-0">Phone</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    (239) 816-9029
+                                    <?=$row['phone']?>
                                 </div>
                             </div>
                             <hr>
@@ -102,8 +101,10 @@
                             <hr>
                             <div class="row justify-content-end">
                                 <div class=" col-3 mr-2 d-flex justify-content-end px-1">
+                                    <!-- <a class="btn btn-info text-right" target="__blank"
+                                        href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> -->
                                     <a class="btn btn-info text-right" target="__blank"
-                                        href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                        href="edit_user.php?id=<?=$id?>">Edit</a>
                                 </div>
                             </div>
                         </div>
