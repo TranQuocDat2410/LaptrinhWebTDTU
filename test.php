@@ -15,6 +15,9 @@
     session_start();
     print_r($_SESSION);
 
+    $current = date('y-m-d');
+    echo $current;
+
 ?>
 
 <!DOCTYPE html>

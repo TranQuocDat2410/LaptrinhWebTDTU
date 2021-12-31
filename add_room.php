@@ -49,32 +49,19 @@
         }
         
         else {
-            require_once 'connection.php';
-           
-            $sql = "INSERT INTO `room` (`name`, `description`, `leader`, `num_room`) VALUES (?,?,?,?)";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($name,$desc, $leader, $number));
+            require 'function.php';
+            if (add_room($name, $desc, $leader, $number) == 1 ){
                 echo "<script type='text/javascript'>
                 $(document).ready(function(){
                 $('#exampleModal').modal('show');
                 });
                 </script>";
+                changePrivilage($leader,"Trưởng phòng");
+                changeAccountRoom($leader,$name);
             }
-            catch(Exception $e){
-                $error = "Lỗi " . $e->getMessage();
+            else{
+                $error = add_room($name, $desc, $leader, $number);
             }
-
-            $sql = "UPDATE `account` SET `chucvu` = 'Trưởng phòng' WHERE `account`.`name` = ?";
-            $stm = $dbCon->prepare($sql);
-            try{
-                $stm->execute(array($leader));
-                
-            }
-            catch (Exception $e){
-                $error = "Lỗi " . $e->getMessage();
-            }
-            
         }
     }
 ?>

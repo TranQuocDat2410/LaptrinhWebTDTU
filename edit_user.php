@@ -19,7 +19,6 @@
 		$stm = $dbCon->prepare($sql);
 		$stm->execute(array($id));
 		$selectedUser = $stm->fetch(PDO::FETCH_ASSOC);
-		// print_r($selectedUser);
 
 		$name = '';
 		$username = '';
@@ -34,6 +33,7 @@
 		$type = '';
 
 		if (isset($_POST["submit"])){
+			require "function.php";
 			print_r($_POST);
 			$name = $_POST['name'];
 			$username = $_POST['username'];
@@ -46,17 +46,23 @@
 			$room = $_POST['room'];
 			$gender = $_POST['gender'];
 
-			$sql = "UPDATE `account` SET `name`=?, `username`=?, `email`=?, `phone`=?, `diachi`=?, `birthday`=?, `salary`=?, `chucvu`=?, `phongban`=?, `gender`=?  WHERE `account`.`id` = ?";
-			$stm = $dbCon->prepare($sql);
-			$stm->execute(array($name,$username,$email,$phone,$address,$birthday,$salary,$type,$room,$gender,$id));
-			if ($stm->rowCount() != 0){
-				echo "success";
-				// header("Location: notification.php");
+			if ($selectedUser['chucvu'] == "Trưởng phòng" && $type == "Nhân viên"){
+				changeLeaderRoom($selectedUser["phongban"], NULL);
 			}
-			else {
-				echo "Lỗi";
+			if ($selectedUser['chucvu'] == "Nhân viên" && $type == "Trưởng phòng"){
+				echo $selectedUser['chucvu'];
+				echo $type;
+				$manager = getLeaderRoom($selectedUser['phongban']);
+				echo changePrivilage($manager,"Nhân viên");
+				echo changeLeaderRoom($selectedUser['phongban'], $selectedUser['name']);
+				// changePrivilage(getLeaderRoom($selectedUser['phongban']), "Nhân viên");
 			}
-
+			if (editUser($name, $username, $email, $phone, $address, $birthday, $salary, $type, $room, $gender, $id)==1){
+				header("Location:  notification.php?type=edit_user_success");
+			}
+			else{
+				$error = editUser($name, $username, $email, $phone, $address, $birthday, $salary, $type, $room, $gender, $id);
+			}
 		}
 
     ?>

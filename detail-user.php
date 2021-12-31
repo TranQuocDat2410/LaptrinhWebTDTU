@@ -44,7 +44,6 @@
                                     <h4><?= $row['name'] ?></h4>
                                     <p class="text-secondary mb-1"><?=$row['chucvu']?></p>
                                     <p class="text-muted font-size-sm"><?= $row['phongban'] ?></p>
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +68,7 @@
                                     <h6 class="mb-0">Phone</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <?= $row['phone'] ?>
+                                    <?=$row['phone']?>
                                 </div>
                             </div>
                             <hr>
