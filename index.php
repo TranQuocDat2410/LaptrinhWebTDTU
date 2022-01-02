@@ -24,6 +24,7 @@
             $type = $row['chucvu'];
             $avatar = $row['avatar']; 
         }
+        $_SESSION['id'] = $id;
     }
 ?>
 

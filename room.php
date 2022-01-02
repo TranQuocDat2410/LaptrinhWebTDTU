@@ -101,7 +101,7 @@
                     echo "<td>".$room['leader']." </td>";
                     echo "<td>".$room['num_room']." </td>";
                     echo "<td>".$room['description']." </td>";
-                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="http://localhost:8888/WebDoAnCuoiKy/edit_room.php?id='.$room['id'].'" >Edit</a> </button></td>';
+                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="edit_room.php?id='.$room['id'].'" >Edit</a> </button></td>';
                     echo'<td><button class="btn btn-danger btn-sm remove">Delete</button></td>';
                     echo '</tr>  ';
                 }
