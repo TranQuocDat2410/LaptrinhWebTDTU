@@ -65,8 +65,31 @@
             });
         });
     </script>
-
-
+<?php
+    session_start();
+        if (!isset($_SESSION['id']))
+        {
+            header('Location: index.php');
+            die();
+        }
+        else
+        {
+            $id = $_SESSION['id'];
+            require_once 'connection.php';
+            $sql = "SELECT * FROM `account` WHERE id=? ";
+            $stm = $dbCon->prepare($sql);
+            $stm->execute(array($id));
+            if ($stm->rowCount()==1){
+                $row = $stm->fetch(PDO::FETCH_ASSOC);
+                $type = $row['chucvu'];
+                
+            }
+            if($type=="Nhân viên"){
+                header('Location: index.php');
+                 die();
+            }
+        }
+?>
     <table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">
     <tr class="control" style="text-align: center; font-weight: bold; font-size: 30px">
             <td colspan="4">
