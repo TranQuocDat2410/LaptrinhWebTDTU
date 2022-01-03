@@ -133,9 +133,9 @@
         }
         else if ($type=="Trưởng phòng"){
             require_once 'connection.php';
-            $sql = "SELECT account.id,account.name,account.gender,account.chucvu,account.phongban,nghiphep.ID_Form,nghiphep.Date,nghiphep.End_day,nghiphep.Reason FROM `account`,`nghiphep` WHERE nghiphep.ID=account.ID and account.chucvu=? and nghiphep.Status=? ORDER BY nghiphep.ID_Form DESC;";
+            $sql = "SELECT account.id,account.name,account.gender,account.chucvu,account.phongban,nghiphep.ID_Form,nghiphep.Date,nghiphep.End_day,nghiphep.Reason FROM `account`,`nghiphep` WHERE nghiphep.ID=account.ID and account.chucvu=? and nghiphep.Status=? and account.phongban=? ORDER BY nghiphep.ID_Form DESC;";
             $stm = $dbCon->prepare($sql);
-            $stm->execute(array("Nhân viên","Waiting"));
+            $stm->execute(array("Nhân viên","Waiting",$room));
             if ($stm->rowCount()>0){
                 while ($nghiphep = $stm->fetch(PDO::FETCH_ASSOC)){
                     $id_nv=$nghiphep['id'];
