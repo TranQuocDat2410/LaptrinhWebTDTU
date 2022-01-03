@@ -24,16 +24,15 @@
     }
 ?>
 
-<body>
-    
+<body style="background-color: aquamarine">
     <div class=" container media bg-success">
-        <div class="media-left mr-3 py-3">
-            <img src="./img/<?=$avatar?>" class="media-object" style="width:150px; height: 150px">
+        <div class="mr-3 py-3">
+            <img src="./img/<?=$avatar?>" class="media-object" style="width:150px; height: 170px; border-radius: 10px">
         </div>
         <div class="media-body py-3">
-            <h4><a href="detail-user.php?id=<?=$id?>" class="media-heading"><?=$name?></a></h4>
-            <p><?=$type?></p>
-            <a href="logout.php" class="me-auto btn-logout btn btn-danger">Log Out</a>
+            <h3><a id="namenv" href="detail-user.php?id=<?=$id?>" class="media-heading" style="text-decoration: none "><?=$name?></a></h3>
+            <h5 id="type"><?=$type?></h5>
+            <a href="logout.php" class="btn btn-danger">Log Out</a>
             <?php require_once 'privilage.php';?>
         </div>
     </div>
@@ -42,38 +41,38 @@
     <div class="container mt-3 p-0">
         <div class="row">
             <div class="col-12 col-lg-3">
-                <ul class=" list-group status-task">
+                <ul class=" list-group">
                     <a href="index.php">
-                        <li class=" mb-1 border list-group-item d-flex justify-content-between align-items-center ">Tasks 
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">Tasks 
                             <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
                     <a href="index.php?filter=new">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">New
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">New
                                 <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
                     <a href="index.php?filter=progress">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">In progress <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">In progress <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>  
                     <a href="index.php?filter=canceled">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Canceled
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">Canceled
                             <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
                     <a href="index.php?filter=waiting">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Waiting
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">Waiting
                             <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
                     <a href="index.php?filter=reject">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Rejected
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">Rejected
                             <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
                     <a href="index.php?filter=completed">
-                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Completed
+                        <li class="st mb-1 border list-group-item d-flex justify-content-between align-items-center ">Completed
                             <span class="bg-success badge bg-primary rounded-pill">1</span>
                         </li>
                     </a>
@@ -87,17 +86,17 @@
                         $reviewtask = getReviewTask($name);
                         foreach ($reviewtask as $row){
                             ?>
-                                <a href="detail_task.php?id=<?=$row['id']?>" class="">
-                                    <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
+                                <a id="cv" style="text-decoration:none; color: black" href="detail_task.php?id=<?=$row['id']?>" class="">
+                                    <div style="background-color: white;" class="col-12 border py-3 px-5 fs-5 mb-3">
                                         <div class="row text-center">
                                             <div class="col-4">
-                                                <p class="task-name fw-bold"><?= $row['name'] ?></p>
+                                                <p class="fw-bold"><?= $row['name'] ?></p>
                                             </div>
                                             <div class="col-4">
-                                                <p class="tasks-status"><?= $row['status'] ?></p>
+                                                <p class=""><?= $row['status'] ?></p>
                                             </div>
                                             <div class="col-4">
-                                                <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                                                <p class="text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
                                             </div>
                                         </div>
                                     </div>
