@@ -76,8 +76,6 @@
         }
     }
 
- 
-
     function editUser($name, $username, $email, $phone, $address, $birthday, $salary, $type, $room, $gender, $id){
         require 'connection.php';
         $sql = "UPDATE `account` SET `name`=?, `username`=?, `email`=?, `phone`=?, `diachi`=?, `birthday`=?, `salary`=?, `chucvu`=?, `phongban`=?, `gender`=?  WHERE `account`.`id` = ?";
@@ -91,9 +89,6 @@
             return $error;
         }
     }
-
-
-
 
     function getNameById($id){
         require 'connection.php';
