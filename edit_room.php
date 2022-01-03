@@ -17,7 +17,29 @@
 </head>
 <body>
 <?php
-
+    session_start();
+    if (!isset($_SESSION['id']))
+    {
+        header('Location: index.php');
+        die();
+    }
+    else
+    {
+        $id = $_SESSION['id'];
+        require_once 'connection.php';
+        $sql = "SELECT * FROM `account` WHERE id=? ";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id));
+        if ($stm->rowCount()==1){
+            $row = $stm->fetch(PDO::FETCH_ASSOC);
+            $type = $row['chucvu'];
+            
+        }
+        if($type=="Nhân viên"){
+            header('Location: index.php');
+             die();
+        }
+    }
     $error = '';
     $id='';
     $name = '';
@@ -148,4 +170,3 @@
 </script>
 </body>
 </html>
-

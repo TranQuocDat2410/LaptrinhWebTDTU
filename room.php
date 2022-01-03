@@ -65,8 +65,31 @@
             });
         });
     </script>
-
-
+<?php
+    session_start();
+        if (!isset($_SESSION['id']))
+        {
+            header('Location: index.php');
+            die();
+        }
+        else
+        {
+            $id = $_SESSION['id'];
+            require_once 'connection.php';
+            $sql = "SELECT * FROM `account` WHERE id=? ";
+            $stm = $dbCon->prepare($sql);
+            $stm->execute(array($id));
+            if ($stm->rowCount()==1){
+                $row = $stm->fetch(PDO::FETCH_ASSOC);
+                $type = $row['chucvu'];
+                
+            }
+            if($type=="Nhân viên"){
+                header('Location: index.php');
+                 die();
+            }
+        }
+?>
     <table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">
     <tr class="control" style="text-align: center; font-weight: bold; font-size: 30px">
             <td colspan="4">
@@ -101,7 +124,7 @@
                     echo "<td>".$room['leader']." </td>";
                     echo "<td>".$room['num_room']." </td>";
                     echo "<td>".$room['description']." </td>";
-                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="http://localhost:8888/WebDoAnCuoiKy/edit_room.php?id='.$room['id'].'" >Edit</a> </button></td>';
+                    echo'<td><button class="btn btn-secondary btn-sm "><a class="text-light" href="edit_room.php?id='.$room['id'].'" >Edit</a> </button></td>';
                     echo'<td><button class="btn btn-danger btn-sm remove">Delete</button></td>';
                     echo '</tr>  ';
                 }
