@@ -6,12 +6,13 @@
                     Chức năng
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class=" add-user-function dropdown-item" href="add-user-form.php" >Thêm nhân viên</a>
-                    <a class="dropdown-item" href="list-user.php">Xem danh sách nhân viên</a>
-                    <a class="dropdown-item" href="add_room.php">Thêm phòng ban</a>
                     <a class="dropdown-item" href="change_avatar.php?id=<?=$_SESSION['id']?>">Đổi avatar</a>
-                    <a class="dropdown-item" href="room.php">Xem danh sách phòng ban</a>
+                    <a class=" add-user-function dropdown-item" href="add-user-form.php" >Thêm nhân viên</a>
+                    <a class="dropdown-item" href="add_room.php">Thêm phòng ban</a>
                     <a class="dropdown-item" href="add_task.php?id=<?=$_SESSION['id']?>">Giao công việc</a>
+                    <a class="dropdown-item" href="list-user.php">Xem danh sách nhân viên</a>
+                    <a class="dropdown-item" href="room.php">Xem danh sách phòng ban</a>
+                    <a class="dropdown-item" href="index.php?review_task">Duyệt công việc</a>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </div>        
@@ -27,6 +28,7 @@
                     <a class="dropdown-item" href="change_avatar.php?id=<?=$_SESSION['id']?>">Đổi avatar</a>
                     <a class="dropdown-item" href="set_password.php?id=<?=$_SESSION['id']?>">Đổi mật khẩu</a>
                     <a class="dropdown-item" href="add_task.php?id=<?=$_SESSION['id']?>">Giao công việc</a>
+                    <a class="dropdown-item" href="index.php?review_task">Duyệt công việc</a>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </div>        

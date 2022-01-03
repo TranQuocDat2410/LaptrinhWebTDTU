@@ -14,112 +14,216 @@
 </head>
 
 <body>
+    <?php
+        session_start();
+        require 'function.php';
+        $sender = getNameById($_SESSION['id']);
+        $submit_task_error = "";
+
+        if (isset($_POST['submit-task'])){
+            if (isset($_FILES['file'])){
+                $file_name = !empty($_FILES['file']['name'])? $_FILES['file']['name'] : "";
+                $file_size = !empty($_FILES['file']['size'])? $_FILES['file']['size'] : "";
+                $file_tmp = !empty($_FILES['file']['tmp_name'])? $_FILES['file']['tmp_name'] : "";
+                $file_type= !empty($_FILES['file']['type'])? $_FILES['file']['type'] : "";   
+            }
+            if (!empty($file_name)){
+                move_uploaded_file($file_tmp,"task/".$file_name);
+            }
+            $desc = !empty($_POST['desc'])? $_POST['desc'] : "";
+            
+            if(empty($desc)){
+                $submit_task_error="Nhập ghi chú";
+            }
+            else{
+                $time = getCurrentTime();
+                submitTask($_GET['id'],$desc,$file_name,$time,$sender);
+                setStatusTask($_GET['id'],"Waiting");
+            }
+        }
+
+        if (isset($_POST['reject-task'])){
+            $reject_desc = (empty($_POST['desc']))? "Nhập lý do" : "";
+            if (empty($reject_desc)){
+                //success
+                setStatusTask($_GET['id'],"Reject");
+                if (isset($_FILES['file'])){
+                    $file_name = !empty($_FILES['file']['name'])? $_FILES['file']['name'] : "";
+                    $file_size = !empty($_FILES['file']['size'])? $_FILES['file']['size'] : "";
+                    $file_tmp = !empty($_FILES['file']['tmp_name'])? $_FILES['file']['tmp_name'] : "";
+                    $file_type= !empty($_FILES['file']['type'])? $_FILES['file']['type'] : "";   
+                }
+                if (!empty($file_name)){
+                    move_uploaded_file($file_tmp,"task/".$file_name);
+                }
+                $time = getCurrentTime();
+                submitTask($_GET['id'],$_POST['desc'],$file_name,$time,$sender);
+                setDeadlineTask($_GET['id'],$_POST['deadline']);
+                header("Location: notification.php");
+            }
+        }
+
+        $currentUser = getNameById($_SESSION['id']) ;
+        // echo $currentUser;
+
+
+    ?>
     <div class="container">
         <div class="main-body">
-            <div class="row gutters-sm">
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-column align-items-center text-center">
-                                <img src="img/avatar.png" alt="Admin"
-                                    class="rounded-circle" width="150">
-                                <div class="mt-3">
-                                    <h4>John Doe</h4>
-                                    <p class="text-secondary mb-1">Chức vụ</p>
-                                    <p class="text-muted font-size-sm">Phòng ban</p>
-                                </div>
-                            </div>
+            <div class="row">
+                <div class="col-md-5 mb-3 px-3">
+                    <div class="container bg-white">
+                        <div class="d-flex justify-content-center pt-3">
+                            <img src="img/pattern.png" width="100" height="100" class="" alt="">
                         </div>
+                        <h3 class="text-center py-2">Chi tiết công việc</h3>
+                        <?php
+                    
+                            $task = getDetailTask($_GET['id']);
+                        ?>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold ">Tên công việc</div>
+                            <div class="col-6"><?= $task['name'] ?></div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold">Deadline</div>
+                            <div class="col-6"><?= $task['deadline'] ?></div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold">Mô tả</div>
+                            <div class="col-6"><?= $task['description']?></div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold">Trạng thái</div>
+                            <div class="col-6"><?= $task['status'] ?></div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold">Đánh giá</div>
+                            <div class="col-6"><?= $task['rating'] ?></div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="pl-5 text-left col-6 font-weight-bold">File đính kèm</div>
+                            <div class="col-6"> <a href="task/<?=$task['file_description']?>" download >  <?= $task['file_description'] ?></a></div>
+                        </div>
+                        <?php
+                            $type = $currentUser==$task['truongphong']? "leader":"employee" ;
+                            renderOption($type,$task['status']);  
+                        ?>
+                        
+
                     </div>
+                    
                 </div>
 
-                <div class="col-md-8">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Full Name</h6>
+                <div class="col-md-7">
+                    <?php
+                        if ($task['status']!="New" && $task['status']!="Completed" && $currentUser==$task['nhanvien']){
+                            ?>
+                                <div class="row bg-white mb-3 justify-content-center px-3 ">
+                                    <div class="col-12 text-center py-3 font-weight-bold h3">Nộp kết quả</div>
+                                    <form method="post" action="" class="w-100 pb-3" enctype="multipart/form-data">
+                                        
+                                        <div class="form-group">
+                                            <textarea name="desc" id="desc" rows="3" class="form-control" placeholder="Nhập ghi chú"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-file">
+                                                <input name="file" type="file" class="custom-file-input" id="customFile" accept="image/gif, image/jpeg, image/png, image/bmp">
+                                                <label class="custom-file-label" for="customFile">File đính kèm</label>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group">
+                                            <?php
+                                                if (!empty($submit_task_error)) {
+                                                    echo "<div class='alert alert-danger'>$submit_task_error</div>";
+                                                }
+                                            ?>
+                                        </div>
+                                        <button name="submit-task" type="submit" class="btn btn-success">Nộp</button>
+                                    </form>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
-                                    Kenneth Valdez
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Email</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    fip@jukmuh.al
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Phone</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    (239) 816-9029
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Mobile</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    (320) 380-4539
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Address</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    Bay Area, San Francisco, CA
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Ngày sinh</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    Kenneth Valdez
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Lương</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    Kenneth Valdez
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Full Name</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    Kenneth Valdez
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row ">
-                                <div class=" col-12">
-                                    <a class="btn btn-info text-right" target="__blank"
-                                        href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
-                                </div>
-                            </div>
-                        </div>
+                            <?php
+                        }
+                        // echo $task['status'];
+                        if (isset($_GET['status'])){
+                            if ($_GET['status']=="reject"){
+                                ?>
+                                    <div class="row bg-white mb-3 justify-content-center px-3 ">
+                                        <div class="col-12 text-center py-3 font-weight-bold h3">Lý do từ chối</div>
+                                        <form method="post" action="" class="w-100 pb-3" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group">
+                                                <textarea name="desc" id="desc" rows="3" class="form-control" placeholder="Nhập lý do"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-file">
+                                                    <input name="file" type="file" class="custom-file-input" id="customFile" accept="image/gif, image/jpeg, image/png, image/bmp">
+                                                    <label class="custom-file-label" for="customFile">File đính kèm</label>
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label for="deadline">Gia hạn deadline</label>
+                                                <input value="<?=$task['deadline']?>" name="deadline" class="form-control" type="date" placeholder="" id="deadline">
+                                            </div>
+                                            <div class="form-group">
+                                                <?php
+                                                    if (!empty($reject_desc)) {
+                                                        echo "<div class='alert alert-danger'>$reject_desc</div>";
+                                                    }
+                                                ?>
+                                            </div>
+                                            <button name="reject-task" type="submit" class="btn btn-success">Nộp</button>
+                                        </form>
+                                    </div>
+                                <?php
+                            }
+
+                            
+
+                            if ($_GET['status']=="cancel"){
+                                header("Location: notification.php?type=warning-cacel-task");
+                            }
+                        }
+                        
+                    ?>
+                    
+
+                    <div class=" bg-white pb-1 row text-center border-bottom">
+                        <div class="col-md-12 font-weight-bold mb-3 pt-2 h3">Lịch sử công việc</div>
+                        <div class="font-weight-bold col-md-3">From</div>
+                        <div class="font-weight-bold col-md-3">Ghi chú</div>
+                        <div class="font-weight-bold col-md-3">File đính kèm</div>
+                        <div class="font-weight-bold col-md-3">Cập nhật vào</div>
+                    </div>
+                    <?php
+                        $taskHistory = getTaskHistory($_GET['id']);
+                        // print_r($taskHistory);
+                        foreach ($taskHistory as $task){
+                            ?>
+                                <div class=" py-2 bg-white row text-center border-bottom">
+                                    <div class="col-md-3"><?=$task['sender']?></div>
+                                    <div class="col-md-3"><?=$task['description']?></div>
+                                    <div class="col-md-3"> <a href="task/<?=$task['attach']?>" download><?=$task['attach']?></a></div>
+                                    <div class="col-md-3"><?php echo date("H:i d/m/Y",strtotime($task['time']))?></div>
+                                </div>        
+                            <?php
+                        }
+                    ?>
+                    
+                    <div class="row justify-content-star bg-white px-3 py-3">
+                        <a href="index.php" class="btn btn-danger">Quay lại</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
 </body>
 
 </html>

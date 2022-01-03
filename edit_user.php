@@ -166,24 +166,12 @@
 										</select>
 									</div>
 								</div>
-								 <div class="row mb-3">
+								<div class="row mb-3">
 									<div class="col-sm-3">
 										<h6 class="mb-0">Phòng ban</h6>
 									</div>
 									<div class="col-sm-9 text-secondary">
-										<select class="custom-select" name="room">
-											<option value="<?=$selectedUser['phongban']?>"><?=$selectedUser['phongban']?></option>
-											<?php
-												$sql = "SELECT name from room where name not in (SELECT phongban FROM account WHERE id=?)";
-												$stm = $dbCon->prepare($sql);
-												$stm->execute(array($id));
-												while ($room = $stm->fetch(PDO::FETCH_ASSOC)){
-													?>	
-														<option value="<?=$room['name']?>"><?=$room['name']?></option>		
-													<?php
-												}
-											?>
-										</select>
+										<input readonly name="room" type="text" class="form-control" value="<?=$selectedUser['phongban']?>">
 									</div>
 								</div>
 								<div class="row">

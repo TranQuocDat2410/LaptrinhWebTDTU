@@ -74,6 +74,21 @@
           </div>
         <?php
         break;
+      case "20":
+        ?>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 mt-5 mx-auto p-3 border rounded">
+                <h4>Cập nhật công việc thành công</h4>
+                <p class="text-success">Congratulations! Your account has been activated.</p>
+                <p>Click <a href="login.php">here</a> to login and manage your account information.</p>
+                <a class="btn btn-success px-5" href="index.php">Quay lại</a>
+              </div>
+            </div>
+          </div>
+        <?php
+        break;
+ 
       default:
         ?>
           <div class="container">

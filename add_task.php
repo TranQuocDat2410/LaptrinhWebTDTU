@@ -39,6 +39,7 @@
             $desc = $_POST['description'];
             $star = date('y-m-d');
             $employee = $_POST['employee'];
+
             if(empty($name)){
                 $error = "Nhập tên công việc";
             }
@@ -57,7 +58,7 @@
                 $stm = $dbCon->prepare($sql);
                 $stm->execute(array($name, $status, $deadline, $star, $leader, $employee, "Chưa hoàn thành", $desc, $file_name));
                 if ($stm->rowCount()==1){
-                    echo "Thêm thành công";
+                    header("Location: notification.php");
                 }            
             }
         }
@@ -84,6 +85,14 @@
                                     ?>
                                         <option value="<?=$row['name']?>"><?=$row['name']?></option>        
                                     <?php
+                                }
+                                if ($_GET['id']==1){
+                                    $leaders = getAllLeaderName();
+                                    foreach($leaders as $leader){
+                                        ?>
+                                            <option value="<?=$leader['name']?>"><?=$leader['name']?></option>        
+                                        <?php
+                                    }
                                 }
                             ?>
                         </select>

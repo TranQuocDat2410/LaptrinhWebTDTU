@@ -27,8 +27,6 @@
     $error = '';
     $phone ='';
 
-    // $f = isset($_FILES['avatar']) ? $_FILES['avatar'] : "";
-    // $dest = "img/".$f['name'];
     if (isset($_FILES['avatar'])){
         $f = $_FILES['avatar'];
         $dest = "img/".$f['name'];

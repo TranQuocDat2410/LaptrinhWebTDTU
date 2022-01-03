@@ -25,10 +25,6 @@
     $leader = '';
     $desc = '';
 
-    // if (isset($_GET['id']))
-    // {
-    //     $id = $_GET['id'];
-    // }
     $id = (isset($_GET['id']))? $_GET['id'] : "";
     $sql = "SELECT * FROM `room` WHERE id=?";
     require_once 'connection.php';

@@ -1,23 +1,5 @@
 <?php
     // require_once 'connection.php';
-
-    function  add_user($username, $name, $room, $address, $birthday, $salary, $email, $avatar, $phone, $gender){
-        $passwordHashed = password_hash($username,PASSWORD_DEFAULT);
-        require 'connection.php';
-        // echo "thành công";
-        $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`,`gender`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?,?); ";
-        $stm = $dbCon->prepare($sql);
-        try{
-            $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone, $gender));
-            return $stm->rowCount();
-        }
-        catch(Exception $e){
-            $error = "Username đã tồn tại";
-            // echo($error);
-            return $error;
-        }
-    }
-
     function add_room($name, $desc, $leader, $number){
         require 'connection.php';
         $sql = "INSERT INTO `room` (`name`, `description`, `leader`, `num_room`) VALUES (?,?,?,?)";
@@ -31,15 +13,33 @@
         }
     }
 
-    function changePrivilage($name, $type){
+    function  add_user($username, $name, $room, $address, $birthday, $salary, $email, $avatar, $phone, $gender){
+        $passwordHashed = password_hash($username,PASSWORD_DEFAULT);
         require 'connection.php';
-        $sql = "UPDATE `account` SET `chucvu` = ? WHERE `account`.`name` = ?";
+        $sql = " INSERT INTO `account` (`username`, `password`, `name`, `chucvu`, `phongban`, `diachi`, `birthday`, `activated`, `salary`, `email`, `avatar`, `phone`,`gender`) VALUES (?, ?, ?, ?, ?, ?, ?, b'0', ?, ?, ?,?,?); ";
         $stm = $dbCon->prepare($sql);
-        $stm->execute(array($type,$name));
-        return $stm->rowCount();
+        try{
+            $stm->execute(array($username,$passwordHashed,$name,"Nhân viên",$room,$address,$birthday,$salary,$email, $avatar, $phone, $gender));
+            return $stm->rowCount();
+        }
+        catch(Exception $e){
+            $error = "Username đã tồn tại";
+            return $error;
+        }
     }
 
-
+    function changeAccountRoom($name,$room){
+        require 'connection.php';
+        $sql = "UPDATE `account` SET `phongban` = ? WHERE `account`.`name` = ?";
+        $stm = $dbCon->prepare($sql);
+        try{
+            $stm->execute(array($room, $name));
+            return $stm->rowCount();
+        }
+        catch(Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     function changeLeaderRoom($room, $leader){
         require 'connection.php';
@@ -55,35 +55,12 @@
         }
     }
 
-
-    function changeAccountRoom($name,$room){
+    function changePrivilage($name, $type){
         require 'connection.php';
-        $sql = "UPDATE `account` SET `phongban` = ? WHERE `account`.`name` = ?";
+        $sql = "UPDATE `account` SET `chucvu` = ? WHERE `account`.`name` = ?";
         $stm = $dbCon->prepare($sql);
-        try{
-            $stm->execute(array($room, $name));
-            return $stm->rowCount();
-        }
-        catch(Exception $e) {
-            return $e->getMessage();
-        }
-    }
-    // echo changeAccountRoom('Thu Thảo', "Kinh doanh");
-
-    // echo changeLeaderRoom("Marketing","Minh Mẫn");
-
-    function editUser($name, $username, $email, $phone, $address, $birthday, $salary, $type, $room, $gender, $id){
-        require 'connection.php';
-        $sql = "UPDATE `account` SET `name`=?, `username`=?, `email`=?, `phone`=?, `diachi`=?, `birthday`=?, `salary`=?, `chucvu`=?, `phongban`=?, `gender`=?  WHERE `account`.`id` = ?";
-		$stm = $dbCon->prepare($sql);
-        try{
-            $stm->execute(array($name,$username,$email,$phone,$address,$birthday,$salary,$type,$room,$gender,$id));
-            return $stm->rowCount();
-        }
-        catch(Exception $e){
-            $error = "Lỗi";
-            return $error;
-        }
+        $stm->execute(array($type,$name));
+        return $stm->rowCount();
     }
 
     function editRoom($name, $leader, $number, $desc, $id){
@@ -99,7 +76,24 @@
         }
     }
 
-    // echo editUser("Thanh Hiền", "thanhhien", "hien123@gmail.com", "123456789", "Hà Nội", "2001-10-02",18,"Nhân viên","Kinh doanh","Nữ","50");
+ 
+
+    function editUser($name, $username, $email, $phone, $address, $birthday, $salary, $type, $room, $gender, $id){
+        require 'connection.php';
+        $sql = "UPDATE `account` SET `name`=?, `username`=?, `email`=?, `phone`=?, `diachi`=?, `birthday`=?, `salary`=?, `chucvu`=?, `phongban`=?, `gender`=?  WHERE `account`.`id` = ?";
+		$stm = $dbCon->prepare($sql);
+        try{
+            $stm->execute(array($name,$username,$email,$phone,$address,$birthday,$salary,$type,$room,$gender,$id));
+            return $stm->rowCount();
+        }
+        catch(Exception $e){
+            $error = "Lỗi";
+            return $error;
+        }
+    }
+
+
+
 
     function getNameById($id){
         require 'connection.php';
@@ -128,8 +122,6 @@
         return $data['leader'];
     }
 
-    echo getLeaderRoom("Marketing");
-
     function setleaderByName($name,$type){
         require 'connection.php';
         $sql = "UPDATE `account` SET `chucvu` = ? WHERE `account`.`name` = ?";
@@ -137,9 +129,221 @@
         $stm->execute(array($type,$name));
     }
 
+    function getTaskList($name){
+        require 'connection.php';
+        $data = array();
+        $sql = "SELECT id, name, status, deadline FROM `tasks` WHERE nhanvien=? AND status NOT IN (SELECT status FROM `tasks` WHERE status=? OR status=?) ";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($name,"Canceled","Completed"));
+        while($row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        }
+        // return $data;
+        foreach($data as $row){
+            ?>
+                <a href="detail_task.php?id=<?=$row['id']?>" class="">
+                    <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <p class="task-name fw-bold"><?= $row['name'] ?></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="tasks-status"><?= $row['status'] ?></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <?php
+        }
+    }
 
+    function getAllLeaderName(){
+        require 'connection.php';
+        $data = array();
+        $sql = "SELECT name FROM `account` WHERE chucvu=?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array("Trưởng phòng"));
+        while($row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        }
+        return $data;
+    }
 
+    function getDetailTask($id){
+        require 'connection.php';
+        $sql = "SELECT name, status, deadline,rating, description, rating, truongphong, nhanvien, file_description FROM `tasks` WHERE id=?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id));
+        // $stm->fetch(PDO::FETCH_ASSOC);
+        return $stm->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function getTaskHistory($id){
+        require 'connection.php';
+        $sql = "SELECT * FROM `task_history` WHERE id=?";
+        $data = array();
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id));
+        while($row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    function submitTask($id,$desc,$attch,$time,$sender){
+        require "connection.php";
+        $sql = "INSERT INTO `task_history` (`id`,`description`, `attach`, `time`, `sender`) VALUES (?,?,?,?,?)";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id,$desc,$attch,$time,$sender));
+    }
+
+    function getReviewTask($leader){
+        require 'connection.php';
+        $data = array();
+        $sql = "SELECT * FROM `tasks` WHERE truongphong=? and status NOT IN (SELECT status FROM `tasks` WHERE status=? OR status=?) ";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($leader,"Completed","Canceled"));
+        while($row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        } 
+        return $data;
+    }
+
+    function setStatusTask($id,$status){
+        require "connection.php";
+        $sql = "UPDATE `tasks` SET `status` = ? WHERE `tasks`.`id` = ?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($status,$id));
+        return $stm->rowCount();
+    }
     
+    function renderOption($type,$status){
+        switch ([$type,$status]){
+            case ["leader","Waiting"]:
+                ?>
+                    <div class="row pb-3">
+                        <div class="col-12">
+                            <a href="rating_task.php?id=<?=$_GET['id']?>" class="btn btn-success ml-4 ">Complete</a>
+                            <a href="detail_task.php?id=<?=$_GET['id']?>&status=reject" class="btn btn-danger ">Reject</a>
+                        </div>
+                    </div>        
+                <?php
+                break;
+            case ["leader","New"]:
+                ?>
+                    <div class="row pb-3">
+                        <div class="col-6">
+                            <a href="detail_task.php?id=" class="btn btn-success ml-4">Edit</a>
+                            <a href="confirm_cancel_task.php?id=<?=$_GET['id']?>" class="btn btn-danger ">Cancel</a>
+                        </div>
+                    </div>        
+                <?php
+                break;
+            case ["employee","New"]:
+                ?>
+                    <div class="row pb-3">
+                        <div class="col-6">
+                            <a href="confirm_task.php?id=<?=$_GET['id']?>" class="btn btn-success ml-4">Start</a>
+                        </div>
+                    </div>        
+                <?php
+                break;
+            case ["leader","Rejected"]:
+                ?>
+                    <div class="row pb-3">
+                        <div class="col-12">
+                            <a href="detail_task.php?id=<?=$_GET['id']?>&status=complete" class="btn btn-success ml-4 ">Complete</a>
+                            <a href="detail_task.php?id=<?=$_GET['id']?>&status=Reject" class="btn btn-danger ">Reject</a>
+                        </div>
+                    </div>        
+                <?php
+                break;
+            default:
+                break;
+            
+        }
+    }
 
-    // setleaderByName("Trần Quốc Đạt","Trưởng phòng");
+    function getCurrentTime(){
+        $tz = 'Asia/Bangkok';
+        $timestamp = time();
+        $dt = new DateTime("now", new DateTimeZone($tz)); 
+        $dt->setTimestamp($timestamp); 
+        $time = $dt->format("Y-m-d G:i:s");
+        return $time;
+    }
+
+    function setDeadlineTask($id,$deadline){
+        require 'connection.php';
+        $sql = "UPDATE `tasks` SET `deadline` = ? WHERE `tasks`.`id` = ?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($deadline,$id));
+        return $stm->rowCount();
+    }
+
+    function setRatingTask($id,$type){
+        require 'connection.php';
+        $sql = "UPDATE `tasks` SET `rating` = ? WHERE `tasks`.`id` = ?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($type,$id));
+        return $stm->rowCount();
+    }
+
+    function setEndTask($id){
+        require 'connection.php';
+        $time = getCurrentTime();
+        $sql = "UPDATE `tasks` SET `end` = ? WHERE `tasks`.`id` = ?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($time,$id));
+        return $stm->rowCount();
+    }
+
+    function getTaskByStatus($name,$status){
+        require 'connection.php';
+        $data = array();
+        $sql = "SELECT * FROM `tasks` WHERE status=? AND nhanvien=? ";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($status,$name));
+        while($row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        } 
+        return $data;
+    }
+
+    function getTaskNameById($id){
+        require 'connection.php';
+        $sql = "SELECT name FROM `tasks` WHERE id=?";
+        $stm = $dbCon->prepare($sql);
+        $stm->execute(array($id));
+        $data = $stm->fetch(PDO::FETCH_ASSOC);
+        return $data['name'];
+    }
+
+    function renderTask($name,$status){
+        $data = getTaskByStatus($name,$status);
+        foreach($data as $row){
+            ?>
+                <a href="detail_task.php?id=<?=$row['id']?>" class="">
+                    <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <p class="task-name fw-bold"><?= $row['name'] ?></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="tasks-status"><?= $row['status'] ?></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <?php
+        }
+    }
+
+
 ?>

@@ -46,91 +46,104 @@
         <div class="row">
             <div class="col-12 col-lg-3">
                 <ul class=" list-group status-task">
-                    <li class=" mb-1 border list-group-item d-flex justify-content-between align-items-center ">Tasks
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">New
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">In
-                        progress
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Cancled
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Waiting
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Rejected
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
-                    <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Completed
-                        <span class="bg-success badge bg-primary rounded-pill">1</span>
-                    </li>
+                    <a href="index.php">
+                        <li class=" mb-1 border list-group-item d-flex justify-content-between align-items-center ">Tasks 
+                            <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
+                    <a href="index.php?filter=new">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">New
+                                <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
+                    <a href="index.php?filter=progress">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">In progress <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>  
+                    <a href="index.php?filter=canceled">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Canceled
+                            <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
+                    <a href="index.php?filter=waiting">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Waiting
+                            <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
+                    <a href="index.php?filter=reject">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Rejected
+                            <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
+                    <a href="index.php?filter=completed">
+                        <li class="mb-1 border list-group-item d-flex justify-content-between align-items-center ">Completed
+                            <span class="bg-success badge bg-primary rounded-pill">1</span>
+                        </li>
+                    </a>
                 </ul>
             </div>
 
             
             <div class="col-12 col-lg-9 tasks-list">
+
                 <?php
-                    require_once 'connection.php';
-                    $sql = 'SELECT * FROM `tasks`';
-                    $stm = $dbCon->prepare($sql);
-                    $stm->execute();
-                    // print_r($stm->rowCount());
-                    while ($row = $stm->fetch(PDO::FETCH_ASSOC)){
-                        // print_r($row) ;
-                        ?>
-                            <a href="detail_task.php?id=<?=$row['id']?>" class="">
-                                <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
-                                    <div class="row text-center">
-                                        <div class="col-4">
-                                            <p class="task-name fw-bold"><?= $row['name'] ?></p>
-                                        </div>
-                                        <div class="col-4">
-                                            <p class="tasks-status"><?= $row['status'] ?></p>
-                                        </div>
-                                        <div class="col-4">
-                                            <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                    require 'function.php';
+                    if (isset($_GET['review_task'])){
+                        $reviewtask = getReviewTask($name);
+                        foreach ($reviewtask as $row){
+                            ?>
+                                <a href="detail_task.php?id=<?=$row['id']?>" class="">
+                                    <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
+                                        <div class="row text-center">
+                                            <div class="col-4">
+                                                <p class="task-name fw-bold"><?= $row['name'] ?></p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="tasks-status"><?= $row['status'] ?></p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="task-deadline text-end"><?= date("d/m/Y",strtotime($row['deadline'])) ?></p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>       
-                        <?php
+                                </a>
+                            <?php
+                        }
                     }
+                    else{
+                        $taskfilter = (isset($_GET['filter']))? $_GET['filter'] : "";
+                        switch ($taskfilter){
+                            case "new":
+                                renderTask($name,"New");
+                                break;
+                            case "progress":
+                                renderTask($name,"In progress");
+                                break;
+                            case "canceled":
+                                renderTask($name,"Canceled");
+                                break;
+                            case "waiting":
+                                renderTask($name,"Waiting");
+                                break;
+                            case "reject":
+                                renderTask($name,"Reject");
+                                break;
+                            case "completed":
+                                renderTask($name,"Completed");
+                                break;
+                            default:
+                                getTaskList($name);
+                                break;
+                            
+                        }
+                    }
+
+                    
+                    
+                    // echo $taskfilter;
+                    
                 ?>
-                <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <p class="task-name fw-bold">Tên công việc</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="tasks-status">In progress</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="task-deadline text-end">30/12/2021</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-12 border py-3 px-5 fs-5 mb-3 task-item">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <p class="task-name fw-bold">Gặp gỡ khách hàng X</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="tasks-status">In progress</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="task-deadline text-end">30/12/2021</p>
-                        </div>
-                    </div>
-                </div>
-
-                
-
-               
             </div>
         </div>
     </div>
