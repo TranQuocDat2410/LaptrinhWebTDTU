@@ -64,6 +64,9 @@
         if (empty($begin_day)) {
             $error = 'Hãy nhập ngày bắt đầu nghỉ';
         }
+        else if ($begin_day<=date("Y-m-d")) {
+            $error = 'Hãy chọn ngày nghỉ sau ngày hiện tại.';
+        }
         else if ($total_day==0) {
             $error = 'Hãy nhập số ngày nghỉ';
         }
