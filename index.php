@@ -3,16 +3,12 @@
 <?php require_once 'heading.php' ?>
 
 <?php
-    // $name = "Trần quốc Đạt";
-    // $type = "Nhân viên";
     session_start();
     if (!isset($_SESSION['id'])){
         header('Location: login.php');
         die();
-    }else{
-        // $name = $_SESSION['name'];
-        // $type = $_SESSION['type'];
-        // $avatar = $_SESSION['avatar'];
+    }
+    else{
         $id = $_SESSION['id'];
         require_once 'connection.php';
         $sql = "SELECT * FROM `account` WHERE id=? ";
@@ -32,7 +28,7 @@
     
     <div class=" container media bg-success">
         <div class="media-left mr-3 py-3">
-            <img src="./img/<?= $avatar ?>" class="media-object" style="width:150px; height: 150px">
+            <img src="./img/<?=$avatar?>" class="media-object" style="width:150px; height: 150px">
         </div>
         <div class="media-body py-3">
             <h4><a href="detail-user.php?id=<?=$id?>" class="media-heading"><?=$name?></a></h4>
@@ -84,9 +80,7 @@
                 </ul>
             </div>
 
-            
             <div class="col-12 col-lg-9 tasks-list">
-
                 <?php
                     require 'function.php';
                     if (isset($_GET['review_task'])){
@@ -134,17 +128,10 @@
                                 break;
                             default:
                                 getTaskList($name);
-                                break;
-                            
+                                break;    
                         }
-                    }
-
-                    
-                    
-                    // echo $taskfilter;
-                    
+                    }                    
                 ?>
-
             </div>
         </div>
     </div>
@@ -152,8 +139,6 @@
     
 
 <?php require_once 'modal-add-user.php' ?>
-
-
     <div id="modal-notification-status" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
