@@ -1,0 +1,30 @@
+
+#lg {
+    background-image: url("img/bgli.png");
+}
+#lg h1{
+    color:aqua;
+}
+#avtimg {
+    border-radius: 10px;
+}
+#avtimg:hover {
+    box-shadow: 4px 8px 8px 8px rgba(0,0,0,0.3);
+}
+#namenv {
+    color: black;
+}
+a#namenv:hover{
+    color: white;
+}
+.task-item:hover {
+    color: blueviolet;
+}
+.st:hover{
+    background-color:aqua;
+}
+#type {
+   color: rgb(255, 235, 8);
+}
+
+
