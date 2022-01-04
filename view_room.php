@@ -83,32 +83,13 @@
         }
     }
 ?>
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            Cập nhật thành công phòng thành công. 
-        </div>
-        <div class="modal-footer">
-           
-            <button type="button" class="btn btn-light"> <a href="room.php">Quay lại</a></button>
-        </div>
-        </div>
-    </div>
-    </div>
+
     
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-8 border rounded my-5 p-4  mx-3">
                 <p class="mb-5"><a href="room.php">Quay lại</a></p>
-                <h3 class="text-center text-secondary mt-2 mb-3 mb-3">Chỉnh sửa thông tin phòng mới</h3>
+                <h3 class="text-center text-secondary mt-2 mb-3 mb-3">Thông tin chi tiết phòng </h3>
                 <form method="post" action="" novalidate enctype="multipart/form-data">
 
                     <div class="form-group">
@@ -117,12 +98,12 @@
                     </div>
                     <div class="form-group">
                         <label for="name">Tên phòng</label>
-                        <input value="<?= $selectedItem['name']?>" name="tenphong" required class="form-control" type="text" placeholder="Tên phòng" id="name">
+                        <input  readonly value="<?= $selectedItem['name']?>" name="tenphong" required class="form-control" type="text" placeholder="Tên phòng" id="name">
                     </div>
                     <div class="form-group">
                         <label for="leader">Trưởng phòng</label>
                         <!-- <input value="" name="idtruongphong" required class="form-control" type="text" placeholder="" id="price"> -->
-                        <select name="leader" id="leader"class="form-control">
+                        <select readonly  name="leader" id="leader"class="form-control">
                             <option><?= $selectedItem['leader'] ?></option>
                             <?php
                                 $sql = 'SELECT * FROM `account` WHERE `account`.`chucvu`="Nhân viên" AND `account`.`phongban`=?';
@@ -137,11 +118,11 @@
                     </div>
                     <div class="form-group">
                         <label for="num_room">Số phòng</label>
-                        <input value="<?= $selectedItem['num_room']?>" name="num_room" required class="form-control" type="number" placeholder="Số phòng" id="num_room">
+                        <input  readonly value="<?= $selectedItem['num_room']?>" name="num_room" required class="form-control" type="number" placeholder="Số phòng" id="num_room">
                     </div>
                     <div class="form-group">
                         <label for="desc">Mô tả</label>
-                        <textarea id="desc" name="mota" rows="4" class="form-control" placeholder="Mô tả"><?= $selectedItem['description'] ?></textarea>
+                        <textarea  readonly id="desc" name="mota" rows="4" class="form-control" placeholder="Mô tả"><?= $selectedItem['description'] ?></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -150,7 +131,7 @@
                                 echo "<div class='alert alert-danger'>$error</div>";
                             }
                         ?>
-                        <button type="submit" class="btn btn-primary px-5 mr-2">Cập Nhật</button>
+                        <button class="btn btn-secondary btn-sm "><a class="text-light" href="edit_room.php?id=<?=$id;?>" >Chỉnh sửa</a> </button></td>
                     </div>
                 </form>
 

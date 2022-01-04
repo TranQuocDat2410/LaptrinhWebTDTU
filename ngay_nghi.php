@@ -10,49 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
-
-    <style>
-        body{
-            padding-top: 50px;
-        }
-        table{
-            width: 80%;
-            text-align: center;
-        }
-        td{
-            padding: 10px;
-        }
-        tr.item{
-            border-top: 1px solid #5e5e5e;
-            border-bottom: 1px solid #5e5e5e;
-        }
-
-        tr.item:hover{
-            background-color: #d9edf7;
-        }
-
-        tr.item td{
-            min-width: 150px;
-        }
-
-        tr.header{
-            font-weight: bold;
-        }
-
-        a{
-            text-decoration: none;
-        }
-        a:hover{
-            color: deeppink;
-            font-weight: bold;
-        }
-
-        td img {
-            max-height: 100px;
-        }
-    </style>
-
+<body id="list-room" class="container pt-3"> 
     <?php
         function get_day($type){
             if($type=="Nhân viên"){
@@ -92,10 +50,10 @@
             $nextday=date('Y-m-d', strtotime($date. ' + 7 days'));
             if($total<7){
                 if($today>=$nextday){
-                    echo'<button type="button" class="btn btn-light"> <a href="nop_don.php?id='.$_SESSION['id'].'">Nộp đơn</a></button>';
+                    echo'<button type="button" class="btn btn-light "> <a href="nop_don.php?id='.$_SESSION['id'].'">Nộp đơn</a></button>';
                 }
                 else{
-                     echo'<p>'.$name.', bạn đã nộp đơn ngày '.$date.', hãy quay lại vào ngày ' .$nextday.'</p>';
+                     echo'<p class="p-3 font-italic text-danger">'.$name.', bạn đã nộp đơn ngày '.$date.', hãy quay lại vào ngày ' .$nextday.'</p>';
                 }
     
             }
@@ -106,10 +64,10 @@
     ?>
     <p style="text-align: center; font-weight: bold; font-size: 30px" >NỘP ĐƠN TRỰC TUYẾN</p>
     <div>
-        <p>Xin chào :<?=$name?></p>
-        <p>Phòng :<?=$room?></p>
-        <p>Bạn đã nghỉ <?=$total?> ngày</p>
-        <p>Bạn có thể nghỉ <?=$day?> ngày</p>
+        <p class="pl-3 pr-3 font-weight-bold text-primary">Xin chào :<?=$name?></p>
+        <p class="pl-3 pr-3 font-weight-bold text-primary">Phòng :<?=$room?></p>
+        <p class="pl-3 pr-3 font-weight-bold text-danger">Bạn đã nghỉ <?=$total?> ngày</p>
+        <p class="pl-3 pr-3 font-weight-bold ">Bạn có thể nghỉ <?=$day?> ngày</p>
     </div>
     <?php
         
@@ -125,8 +83,8 @@
              $date=$nghiphep['Date'];
              $_SESSION['id_form'] = $id_form;
             if ($status=="Waiting"){
-                echo'<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">';
-                echo'<tr class="header">';
+                echo'<table cellpadding="10" cellspacing="10" border="0"  class="table-bordered table-hover m-auto">';
+                echo'<tr class="header font-weight-bold text-center bg-primary text-light">';
                 echo'<td>ID</td>';
                 echo'<td>Họ và Tên</td>';
                 echo'<td>Chức vụ</td>';
@@ -134,7 +92,7 @@
                 echo'<td>Ngày Nghỉ</td>';
                 echo'<td>Lí do</td>';
                 echo'<td>Trạng thái</td>';
-                echo'<td></td>';
+                echo'<td> Chi tiết</td>';
                 echo'</tr>';
                 echo'<tr class="item">';
                 echo'<td>'.$id.'</td>';
@@ -154,8 +112,8 @@
                 $('#succedModal').modal('show');
                 });
                 </script>";
-                echo'<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">';
-                echo'<tr class="header">';
+                echo'<table cellpadding="10" cellspacing="10" border="0"  class="table-bordered table-hover m-auto">';
+                echo'<tr class="header font-weight-bold text-center bg-primary text-light">';
                 echo'<td>ID</td>';
                 echo'<td>Họ và Tên</td>';
                 echo'<td>Chức vụ</td>';
@@ -163,6 +121,7 @@
                 echo'<td>Ngày Nghỉ</td>';
                 echo'<td>Lí do</td>';
                 echo'<td>Trạng thái</td>';
+                echo'<td> Chi tiết</td>';
                 echo'</tr>';
                 echo'<tr class="item">';
                 echo'<td>'.$id.'</td>';
@@ -172,6 +131,7 @@
                 echo' <td>'.$date.'</td>';
                 echo' <td>'.$reason.'</td>';
                 echo' <td>'.$status.'</td>';
+                echo '<td><button type="button" class="btn btn-light"> <a href="chitiet_don.php?id='.$_SESSION['id'].'&id_form='.$_SESSION['id_form'].'">Chi tiết</a></button></td>';
                 echo' </tr>';
                 echo'</table>';
       
@@ -183,8 +143,8 @@
                 $('#failModal').modal('show');
                 });
                 </script>";
-                echo'<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">';
-                echo'<tr class="header">';
+                echo'<table cellpadding="10" cellspacing="10" border="0"  class="table-bordered table-hover m-auto">';
+                echo'<tr class="header font-weight-bold text-center bg-primary text-light">';
                 echo'<td>ID</td>';
                 echo'<td>Họ và Tên</td>';
                 echo'<td>Chức vụ</td>';
@@ -192,6 +152,7 @@
                 echo'<td>Ngày Nghỉ</td>';
                 echo'<td>Lí do</td>';
                 echo'<td>Trạng thái</td>';
+                echo'<td> Chi tiết</td>';
                 echo'</tr>';
                 echo'<tr class="item">';
                 echo'<td>'.$id.'</td>';
@@ -201,6 +162,7 @@
                 echo' <td>'.$date.'</td>';
                 echo' <td>'.$reason.'</td>';
                 echo' <td>'.$status.'</td>';
+                echo '<td><button type="button" class="btn btn-light"> <a href="chitiet_don.php?id='.$_SESSION['id'].'&id_form='.$_SESSION['id_form'].'">Chi tiết</a></button></td>';
                 echo' </tr>';
                 echo'</table>';
 
@@ -214,7 +176,7 @@
         }
     
     ?>
-    <div>
+    <div class="float-right"> 
         <button type="button" class="btn btn-light mt-1 "> <a href="lichsu_don.php?id=<?=$_SESSION['id']?>">Xem lịch sử đơn nghỉ phép</a></button>
         <button type="button" class="btn btn-light mt-1 "> <a href="index.php">Trở lại</a></button>
     </div>

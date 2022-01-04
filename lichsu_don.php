@@ -9,49 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
-
-    <style>
-        body{
-            padding-top: 50px;
-        }
-        table{
-            width: 80%;
-            text-align: center;
-        }
-        td{
-            padding: 10px;
-        }
-        tr.item{
-            border-top: 1px solid #5e5e5e;
-            border-bottom: 1px solid #5e5e5e;
-        }
-
-        tr.item:hover{
-            background-color: #d9edf7;
-        }
-
-        tr.item td{
-            min-width: 150px;
-        }
-
-        tr.header{
-            font-weight: bold;
-        }
-
-        a{
-            text-decoration: none;
-        }
-        a:hover{
-            color: deeppink;
-            font-weight: bold;
-        }
-
-        td img {
-            max-height: 100px;
-        }
-    </style>
-
+<body id="list-room" >
     <?php
         session_start();
         if (!isset($_SESSION['id']))
@@ -62,7 +20,7 @@
         else
         {
             $id = $_SESSION['id'];
-            echo $id;
+            
             require_once 'connection.php';
             $sql = "SELECT * FROM `account` WHERE id=? ";
             $stm = $dbCon->prepare($sql);
@@ -76,57 +34,62 @@
             }
        }
     ?>
-    <p style="text-align: center; font-weight: bold; font-size: 30px" >DANH SÁCH CÁC ĐƠN ĐÃ NỘP</p>
-    <div>
-        <p>Xin chào :<?=$name?></p>
-        <p>Phòng :<?=$room?></p>
-    </div>
-   <table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto">
-        <tr class="header">
-            <td>ID</td>
-            <td>Họ và Tên</td>
-            <td>Chức vụ</td>
-            <td>Phòng bạn</td>
-            <td>Ngày Nghỉ</td>
-            <td>Lí do</td>
-            <td>Trạng thái</td>
-            <td></td>
-        </tr>
-    <?php
-        require_once 'connection.php';
-        $sql = "SELECT * FROM `nghiphep` WHERE ID=? ORDER BY Date DESC ";
-        $stm = $dbCon->prepare($sql);
-        $stm->execute(array($id));
-        if ($stm->rowCount()>0){
-             while ($nghiphep = $stm->fetch(PDO::FETCH_ASSOC)){
-                $id_form=$nghiphep['ID_Form'];
-                $status=$nghiphep['Status'];
-                $reason=$nghiphep['Reason'];
-                $date=$nghiphep['Date'];
-                $_SESSION['id_form'] = $id_form;
-                echo'<tr class="item">';
-                echo'<td>'.$id.'</td>';
-                echo'<td>'.$name.'</td>';
-                echo'<td>'.$type.'</td>';
-                echo' <td>'.$room.'</td>';
-                echo' <td>'.$date.'</td>';
-                echo' <td>'.$reason.'</td>';
-                echo' <td>'.$status.'</td>';
-                echo '<td><button type="button" class="btn btn-light"> <a href="chitiet_don.php?id='.$id.'&id_form='.$id_form.'">Chi tiết</a></button></td>';
-                echo' </tr>';
+    <!-- style="text-align: center; font-weight: bold; font-size: 30px" -->
+    <h2 class="font-weight-bold text-center pt-3" >DANH SÁCH CÁC ĐƠN ĐÃ NỘP</h2>
+    <div class="container pt-3">
+        <div>
+            <p class="pl-3 pr-3 font-weight-bold text-primary" >Xin chào :<?=$name?></p>
+            <p class="pb-3 pl-3 pr-3 font-weight-bold text-primary">Phòng :<?=$room?></p>
+        </div>
+    <table cellpadding="10" cellspacing="10" border="0" class="table-bordered table-hover m-auto" >
+            <tr class="header font-weight-bold text-center bg-primary text-light">
+                <td>ID</td>
+                <td>Họ và Tên</td>
+                <td>Chức vụ</td>
+                <td>Phòng bạn</td>
+                <td>Ngày Nghỉ</td>
+                <td>Lí do</td>
+                <td>Trạng thái</td>
+                <td>Chi tiết</td>
+        </thead>
+        <?php
+            require_once 'connection.php';
+            $sql = "SELECT * FROM `nghiphep` WHERE ID=? ORDER BY Date DESC ";
+            $stm = $dbCon->prepare($sql);
+            $stm->execute(array($id));
+            if ($stm->rowCount()>0){
+                while ($nghiphep = $stm->fetch(PDO::FETCH_ASSOC)){
+                    $id_form=$nghiphep['ID_Form'];
+                    $status=$nghiphep['Status'];
+                    $reason=$nghiphep['Reason'];
+                    $date=$nghiphep['Date'];
+                    $_SESSION['id_form'] = $id_form;
+                    echo'<tr class="item">';
+                    echo'<td>'.$id.'</td>';
+                    echo'<td>'.$name.'</td>';
+                    echo'<td>'.$type.'</td>';
+                    echo' <td>'.$room.'</td>';
+                    echo' <td>'.$date.'</td>';
+                    echo' <td>'.$reason.'</td>';
+                    echo' <td>'.$status.'</td>';
+                    echo '<td><button type="button" class="btn btn-light"> <a href="chitiet_don.php?id='.$id.'&id_form='.$id_form.'">Chi tiết</a></button></td>';
+                    echo' </tr>';
+                }
+                
             }
-             
-        }
-        else{
-            echo"lỗi";
-        }
-    
-    ?>
-    </table>
-    <div>
+            else{
+                echo" Bạn chưa có đơn nào trong lịch sử.";
+            }
         
-        <button type="button" class="btn btn-light mt-1 "> <a href="ngay_nghi.php">Trở lại</a></button>
-    </div>
+        ?>
+       
+        </table>
+        
+        <div>
+            <button type="button" class="btn btn-light mt-1 ml-3 float-right "> <a href="ngay_nghi.php">Trở lại</a></button>
+        </div>
+    
+     </div>
   
     
 </body>

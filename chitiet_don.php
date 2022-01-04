@@ -9,11 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <style>
-        .bg {
-            background: #eceb7b;
-        }
-    </style>
+    
 </head>
 <body>
  <?php 
@@ -37,7 +33,7 @@
              $room=$row['phongban'];
          }
          $id_form = (isset($_GET['id_form']))? $_GET['id_form'] : "";;
-         echo $id_form;
+         
          $sql = "SELECT * FROM `nghiphep` WHERE ID_Form=? ";
          $stm = $dbCon->prepare($sql);
          $stm->execute(array($id_form));
@@ -56,7 +52,7 @@
  <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-8 border rounded my-5 p-4  mx-3">
-                <p class="mb-5"><a href="ngay_nghi.php">Quay lại</a></p>
+                <p class="mb-5"><a href="lichsu_don.php">Quay lại</a></p>
                 <h3 class="text-center text-secondary mt-2 mb-3 mb-3">Đơn xin nghỉ phép</h3>
                 <form method="post" action="" novalidate enctype="multipart/form-data">
 
